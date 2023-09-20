@@ -11,7 +11,7 @@ const SearchBooks = () => {
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState("");
-  const [saveBook, { error }] = useMutation(SAVE_BOOK);
+  const [saveBook] = useMutation(SAVE_BOOK);
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
@@ -63,7 +63,7 @@ const SearchBooks = () => {
       return false;
     }
     try {
-      const { data } = await saveBook({
+      await saveBook({
         variables: { savedBook: { ...bookToSave } },
       });
       setSavedBookIds([...savedBookIds, bookToSave.bookID]);
@@ -108,8 +108,8 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border="dark">
+              <Col md="4" key={book.bookID}>
+                <Card border="dark">
                   {book.image ? (
                     <Card.Img
                       src={book.image}
