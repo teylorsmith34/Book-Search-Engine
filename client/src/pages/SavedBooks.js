@@ -8,7 +8,7 @@ import Auth from "../utils/auth";
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
-  const userData = data?.me || {};
+  const userData = data?.me || data?.user || {};
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
   const handleDeleteBook = async (bookId) => {
@@ -36,7 +36,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
@@ -83,59 +83,3 @@ const SavedBooks = () => {
 };
 
 export default SavedBooks;
-
-//   return (
-//     <main>
-//       <div className="flex-row justify-space-between">
-//         <div className="col-12 mb-3">
-//           {userData.savedBooks.length
-//             ? `Viewing ${userData.savedBooks.length} saved ${
-//                 userData.savedBooks.length === 1 ? "book" : "books"
-//               }:`
-//             : "You have no saved books!"}
-//         </div>
-//         {userData.savedBooks.map((book) => {
-//           return (
-//             <div key={book.bookId} className="col-12 col-xl-6">
-//               <div className="card mb-3">
-//                 <h3 className="card-header bg-primary text-light p-2 m-0">
-//                   {book.title} <br />
-//                   {book.authors.length
-//                     ? `Written by ${book.authors.join(", ")}`
-//                     : ""}
-//                 </h3>
-//                 <div className="card-body bg-light p-2">
-//                   {book.image ? (
-//                     <img
-//                       src={book.image}
-//                       alt={book.title}
-//                       className="card-img-top"
-//                     />
-//                   ) : null}
-//                   <p className="card-text">{book.description}</p>
-//                   <div>
-//                     <a
-//                       href={book.link}
-//                       target="_blank"
-//                       rel="noopener noreferrer"
-//                     >
-//                       More Information on Google Books
-//                     </a>
-//                   </div>
-//                   <button
-//                     className="btn btn-danger btn-block mt-2"
-//                     onClick={() => handleDeleteBook(book.bookId)}
-//                   >
-//                     Delete this Book!
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </main>
-//   );
-// };
-
-// export default SavedBooks;

@@ -19,7 +19,7 @@ const SearchBooks = () => {
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
-    localStorage.setItem("saved_books", JSON.stringify(savedBookIds));
+    localStorage.setItem("savedBookIds", JSON.stringify(savedBookIds));
     return () => saveBookIds(savedBookIds);
   }, [savedBookIds]);
 
@@ -74,7 +74,7 @@ const SearchBooks = () => {
 
   return (
     <>
-      <div className="text-light bg-dark pt-5">
+      <div className="text-light bg-dark p-5">
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>

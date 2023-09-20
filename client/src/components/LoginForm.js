@@ -9,7 +9,7 @@ const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [loginUser] = useMutation(LOGIN_USER);
+  const [loginUser, { error, data }] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -103,57 +103,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-// const LoginForm = () => {
-//   const [formState, setFormState] = useState({ email: "", password: "" });
-//   const [login, { error }] = useMutation(LOGIN_USER);
-
-//   const handleFormSubmit = async (event) => {
-//     event.preventDefault();
-//     const mutationResponse = await login({
-//       variables: {
-//         email: formState.email,
-//         password: formState.password,
-//       },
-//     });
-//     const token = mutationResponse.data.login.token;
-//     Auth.login(token);
-//   };
-
-//   const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setFormState({
-//       ...formState,
-//       [name]: value,
-//     });
-//   };
-
-//   return (
-//     <div>
-//       <form onSubmit={handleFormSubmit}>
-//         <input
-//           className="form-input"
-//           placeholder="Your email"
-//           name="email"
-//           type="email"
-//           value={formState.email}
-//           onChange={handleChange}
-//         />
-//         <input
-//           className="form-input"
-//           placeholder="******"
-//           name="password"
-//           type="password"
-//           value={formState.password}
-//           onChange={handleChange}
-//         />
-//         <button className="btn btn-block btn-primary" type="submit">
-//           Submit
-//         </button>
-//       </form>
-//       {error && <div>Login failed</div>}
-//     </div>
-//   );
-// };
-
-// export default LoginForm;
