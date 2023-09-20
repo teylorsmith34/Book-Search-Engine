@@ -4,6 +4,7 @@ import { SAVE_BOOK } from "../utils/mutations";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 import Auth from "../utils/auth";
+import { searchGoogleBooks } from "../utils/API";
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -18,8 +19,9 @@ const SearchBooks = () => {
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
+    localStorage.setItem("saved_books", JSON.stringify(savedBookIds));
     return () => saveBookIds(savedBookIds);
-  });
+  }, [savedBookIds]);
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -30,11 +32,15 @@ const SearchBooks = () => {
     }
 
     try {
-      const { data } = await SearchBooks({
-        variables: { searchTerm: searchInput },
-      });
+      const response = await searchGoogleBooks(searchInput);
 
-      const bookData = data.books.map((book) => ({
+      if (!response.ok) {
+        throw new Error("something went wrong!");
+      }
+
+      const { items } = await response.json();
+
+      const bookData = items.map((book) => ({
         bookID: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
         title: book.volumeInfo.title,
@@ -57,8 +63,8 @@ const SearchBooks = () => {
       return false;
     }
     try {
-      await saveBook({
-        variables: { bookData: bookToSave },
+      const { data } = await saveBook({
+        variables: { savedBook: { ...bookToSave } },
       });
       setSavedBookIds([...savedBookIds, bookToSave.bookID]);
     } catch (err) {
