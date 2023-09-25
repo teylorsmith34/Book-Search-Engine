@@ -41,7 +41,7 @@ const SearchBooks = () => {
       const { items } = await response.json();
 
       const bookData = items.map((book) => ({
-        bookID: book.id,
+        bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
@@ -56,17 +56,18 @@ const SearchBooks = () => {
   };
 
   const handleSaveBook = async (bookId) => {
-    const bookToSave = searchedBooks.find((book) => book.bookID === bookId);
+    const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+    console.log(bookToSave);
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
       return false;
     }
     try {
-      await saveBook({
+      const { data } = await saveBook({
         variables: { savedBook: { ...bookToSave } },
       });
-      setSavedBookIds([...savedBookIds, bookToSave.bookID]);
+      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
     }
@@ -108,7 +109,7 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4" key={book.bookID}>
+              <Col md="4" key={book.bookId}>
                 <Card border="dark">
                   {book.image ? (
                     <Card.Img
